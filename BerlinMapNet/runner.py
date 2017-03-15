@@ -35,11 +35,7 @@ import traci.constants as tc
 def run(noChangeOfTarget):
     """execute the TraCI control loop"""
     step = 0
-#    myKafka = KafkaClient("vm-10-155-208-120.cloud.mwn.de:6667")
 
-    #lat = 52.525415
-    #lon = 13.398882
-    
     lat = 52.55192
     lon = 13.40123
 
@@ -57,9 +53,9 @@ def run(noChangeOfTarget):
 
     producer, consumer = setUpKafka()
 
-    #Test
-#    lonTest=1295.059694378113
-#    latTest=982.6744777355343
+    #Test values
+    #    lonTest=1295.059694378113
+    #    latTest=982.6744777355343
 
     #Restaurant basic setup
     traci.poi.add('1', 100, 120, (255,0,0,0), '1',0)
@@ -102,12 +98,12 @@ def run(noChangeOfTarget):
         #traci.simulation.convert2D(tempPos[0],tempPos[1]
 
         #update polygon
-#        if(step%5 == 0):
+        #if(step%5 == 0):
         XCar,YCar = net.convertLonLat2XY(lonConv, latConv, False)
         print("NewBox: ", XCar, YCar)
 
         traci.polygon.remove('1',50)               
-#        list1 = [(600+i,100+j),(600+i,200+j),(700+i,200+j),(700+i,100+j),(600+i,100+j)]
+        #list1 = [(600+i,100+j),(600+i,200+j),(700+i,200+j),(700+i,100+j),(600+i,100+j)]
         list1 = [(XCar-i,YCar+j),(XCar+i,YCar+j),(XCar+i,YCar-j),(XCar-i,YCar-j),(XCar-i,YCar+j)]
         traci.polygon.add('1', list1, (255,0,0,0), False, '1',50)
 
@@ -152,7 +148,7 @@ def setUpKafka():
     # producer = KafkaProducer(bootstrap_servers='vm-10-155-208-120.cloud.mwn.de:6667')
     print("setup kafka")
     ProdClient = KafkaClient("vm-10-155-208-120.cloud.mwn.de:6667")
-    ConsClient = KafkaClient("vm-10-155-208-120.cloud.mwn.de:6667") #Creating two different client instances for threading
+    ConsClient = KafkaClient("vm-10-155-208-120.cloud.mwn.de:6667") #Creating two different client instances for separate threads
 
     producer = SimpleProducer(ProdClient)
     consumer = SimpleConsumer(ConsClient,"group","MyTest")
